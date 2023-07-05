@@ -56,10 +56,16 @@ export default {
                     name: 'Home'
                 },
                 {
+                    icon:'mdi-format-list-bulleted',
+                    title: "Categorías",
+                    name: 'Categories'
+                },
+                {
                     icon:'mdi-account',
                     title: "Acerca",
                     name: 'About'
                 }
+               
             ]
         }
     },
