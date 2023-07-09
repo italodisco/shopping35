@@ -42,12 +42,13 @@
         $ {{ product.price }}
       </div>
 
-      <div>{{ product.description }}</div>
+      <!-- <div>{{ product.description }}</div> -->
     </v-card-text>
 
     <v-divider class="mx-4"></v-divider>
 
     <v-card-actions>
+        
       <v-btn
         color="green darken-2"
         text
@@ -57,10 +58,42 @@
         Agregar
       </v-btn>
     </v-card-actions>
+    <div class="text-center">
+    <!-- <v-btn
+      dark
+      color="red darken-2"
+      @click="snackbar = true"
+    > -->
+      <!-- Open Snackbar
+    </v-btn> -->
+     <!-- Paso 1: botón de vuetify eliminado  -->
+
+    <v-snackbar
+      v-model="snackbar"
+      :multi-line="multiLine"
+      color="green"
+    >
+      {{ product.title }} Agregado al Carrito
+      <v-icon>mdi-cart-plus</v-icon>
+      <!-- Paso 2: Esta parte fue modificada para que funcione el snackbar para nuestros fines -->
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+  </div>
   </v-card>
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 export default {
     name: 'card-component',
 props: {
@@ -72,14 +105,28 @@ props: {
     data: function(){
         return {
             loading: false,
-            selection: 1
+            selection: 1,
+            // Paso 3: la data de abajo corresponde a la data agregada desde el snackbar de vuetify
+            multiLine: true,
+            snackbar: false,
+            // text: `I'm a multi-line snackbar.`,
         }
     },
     // computed: {},
 methods: {
-    reserve () {
-        this.loading = true
-        setTimeout(() => (this.loading = false), 2000)
+    ...mapActions(['addProductCart']),
+    add () {
+        let prod = {
+            id:this.product.id,
+            title:this.product.title,
+            price:this.product.price,
+            count:1,
+        }
+        this.addProductCart(prod)
+        // Paso 4: para levantar el alert cada vez que agreguemos productos al carrito
+        this.snackbar=true
+        // this.loading = true
+        // setTimeout(() => (this.loading = false), 2000)
       },
     }
   
